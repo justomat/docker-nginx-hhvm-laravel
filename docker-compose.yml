@@ -1,0 +1,24 @@
+hhvm:
+    image: brunoric/hhvm:deb
+    expose:
+        - "9000"
+    volumes:
+        - ./src:/var/www/src
+    links:
+        - db
+
+nginx:
+    build: .
+    ports:
+        - "8000:80"
+    volumes_from:
+        - hhvm
+    links:
+        - hhvm
+
+db:
+    image: mysql:5.6
+    ports:
+        - "3306:3306"
+    environment:
+        MYSQL_ROOT_PASSWORD: secret
